@@ -1,27 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
+/*   lists_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ncheniou <ncheniou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: naimcheniounigomez <naimcheniounigomez@    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 13:46:29 by ncheniou          #+#    #+#             */
-/*   Updated: 2025/03/24 21:24:22 by ncheniou         ###   ########.fr       */
+/*   Updated: 2025/03/24 22:33:19 by naimcheniou      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
-
-void	ft_free_all(char **matrix)
-{
-	int	i;
-
-	i = 0;
-	while (matrix[i])
-		free(matrix[i++]);
-	free(matrix);
-}
-
 
 void	ft_free_stacks(t_stack **stacks)
 {
@@ -36,24 +25,38 @@ void	ft_free_stacks(t_stack **stacks)
 	free(stacks);
 }
 
-void	ft_duplicates(t_stack *s)
+t_stack	*ft_lstlast_ps(t_stack *lst)
 {
-	t_stack *num;
+	while (lst && lst->next != NULL)
+		lst = lst->next;
+	return (lst);
+}
 
-	if (s == NULL)
-		return ;
-	while (s)
+void	ft_lstadd_back_ps(t_stack **lst, t_stack *new)
+{
+	t_stack	*aux;
+
+	aux = ft_lstlast_ps(*lst);
+	if (*lst != NULL)
 	{
-		num = s->next;
-		while (num != NULL)
-		{
-			if (s->dataarg == num->dataarg)
-			{
-				write(2, "Error\n", 6);
-				exit(EXIT_SUCCESS) ;
-			}
-			num =  num->next;
-		}
-		s = s->next;
-	}	
+		new->prev = aux;
+		new->next = NULL;
+		aux->next = new;
+	}
+	else
+		*lst = new;
+}
+
+t_stack	*ft_lstnew_ps(int index, long num)
+{
+	t_stack	*node;
+
+	node = ft_calloc(1, sizeof(t_stack));
+	if (!node)
+		return (NULL);
+	node->index	 = index;
+	node->dataarg = num;
+	node->prev = NULL;
+	node->next = NULL;
+	return (node);
 }

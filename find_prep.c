@@ -40,25 +40,74 @@ t_stack	*ft_findmax(t_stack *stacks)
 	return (max_node);
 }
 
-t_stack	*ft_lowercost(t_stack *stacks)
+int	ft_lstlen_ps(t_stack *stacks)
 {
-	t_stack	*best_node;
-	int		best_score;
-	int		moves;
+	int	counter;
 
-	best_node = NULL;
-	best_score = INT_MAX;
+	counter = 0;
 	while (stacks)
 	{
-		moves = stacks->cost;
-		if (stacks->median == stacks->target->median)
-			moves -= 1;
-		if (moves < best_score)
-		{
-			best_score = moves;
-			best_node = stacks;
-		}
+		counter++;
 		stacks = stacks->next;
 	}
-	return (best_node);
+	return (counter);
 }
+
+int	ft_stackorder(t_stack *stacks)
+{
+	if (!stacks)
+		return (1);
+	while (stacks && stacks->next)
+	{
+		if (stacks->dataarg > stacks->next->dataarg)
+			return (0);
+		stacks = stacks->next;
+	}
+	return (1);
+}
+
+void	ft_stack_median(t_stack *stacks)
+{
+	int	half;
+	int	med;
+	int	i;
+
+	i = 0;
+	half = ft_lstlen_ps(stacks);
+	med = half / 2;
+	if (half % 2)
+		med++;
+	while (stacks)
+	{
+		stacks->index = i++;
+		if (stacks->index < med)
+			stacks->median = true;
+		else
+			stacks->median = false;
+		stacks = stacks->next;
+	}
+}
+
+
+// t_stack	*ft_lowercost(t_stack *stacks)
+// {
+// 	t_stack	*best_node;
+// 	int		best_score;
+// 	int		moves;
+
+// 	best_node = NULL;
+// 	best_score = INT_MAX;
+// 	while (stacks)
+// 	{
+// 		moves = stacks->cost;
+// 		if (stacks->median == stacks->target->median)
+// 			moves -= 1;
+// 		if (moves < best_score)
+// 		{
+// 			best_score = moves;
+// 			best_node = stacks;
+// 		}
+// 		stacks = stacks->next;
+// 	}
+// 	return (best_node);
+// }

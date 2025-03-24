@@ -1,26 +1,5 @@
 #include "push_swap.h"
 
-void	ft_set_a(t_stack *a, t_stack *b)
-{
-	t_stack	*node_b;
-	long	best_index;
-
-	best_index = LONG_MIN;
-	node_b = b;
-	while (node_b)
-	{
-		if(node_b->dataarg < a->dataarg && node_b->dataarg > best_index)
-		{
-			best_index = node_b->dataarg;
-			a->target = node_b;
-		}
-		node_b = node_b->next;
-	}
-	if (best_index == LONG_MIN)
-		a->target = ft_findmax(b);
-}
-
-
 t_stack	*ft_cheapest(t_stack **a, t_stack **b)
 {
 	t_stack	*node_a;
@@ -43,6 +22,26 @@ t_stack	*ft_cheapest(t_stack **a, t_stack **b)
 		node_a = node_a->next;
 	}
 	return (min_cost);
+}
+
+void	ft_set_a(t_stack *a, t_stack *b)
+{
+	t_stack	*node_b;
+	long	best_index;
+
+	best_index = LONG_MIN;
+	node_b = b;
+	while (node_b)
+	{
+		if(node_b->dataarg < a->dataarg && node_b->dataarg > best_index)
+		{
+			best_index = node_b->dataarg;
+			a->target = node_b;
+		}
+		node_b = node_b->next;
+	}
+	if (best_index == LONG_MIN)
+		a->target = ft_findmax(b);
 }
 
 void	ft_pushcost(t_stack *a,t_stack *b,t_stack *node_a, int *counter)
@@ -71,6 +70,51 @@ void	ft_pushcost(t_stack *a,t_stack *b,t_stack *node_a, int *counter)
 		*counter += node_a->target->index;
 	else
 		*counter += below_median;
+}
+
+t_stack	*ft_set_b(t_stack *node, t_stack *a)
+{
+	t_stack	*target;
+	long	best_index;
+	
+	best_index = LONG_MAX;
+	target = a;
+	while (target)
+	{
+		if(target->dataarg > node->dataarg && target->dataarg < best_index)
+		{
+			best_index = target->dataarg;
+			node->target = target;
+		}
+		target = target->next;
+	}
+	if (best_index == LONG_MAX)
+		node->target = ft_findmin(a);
+	return (node->target);
+}
+
+void	ft_stack_top_head(t_stack **a, t_stack **b, t_stack *min_cost)
+{
+	if (!min_cost || !min_cost->target)
+		return ;
+	if (min_cost->median && min_cost->target->median)
+		while (*a != min_cost && *b != min_cost->target)
+			ft_rotate(a, b, MOVERR);
+	else if (!min_cost->median && !min_cost->target->median)
+		while (*a != min_cost && *b != min_cost->target)
+			ft_rever_rotate(a, b, MOVERRR);
+	if (min_cost->median)
+		while (*a != min_cost)
+			ft_rotate(a, b, MOVERA);
+	else	
+		while (*a != min_cost)
+			ft_rever_rotate(a, b, MOVERRA);
+	if (min_cost->target->median)
+		while (*b != min_cost->target)
+			ft_rotate(a, b, MOVERB);
+	else
+		while (*b != min_cost->target)
+			ft_rever_rotate(a, b, MOVERRB);
 }
 
 // static void	ft_analyse(t_stack *a, t_stack *b)

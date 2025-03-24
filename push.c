@@ -8,7 +8,7 @@ void	ft_pushnode(t_stack **dest, t_stack **src)
 		return ;
 	push = *src;
 	*src = (*src)->next;
-	if (!*dest)
+	if (!(*dest))
 	{
 		*dest = push;
 		(*dest)->next = NULL;
@@ -16,9 +16,10 @@ void	ft_pushnode(t_stack **dest, t_stack **src)
 	else
 	{
 		push->next = *dest;
-		push->next->prev = push;
+		push->prev = NULL;
 		if (*src)
 			(*src)->prev = NULL;
+		(*dest)->prev = push;
 		*dest = push;
 	}
 }

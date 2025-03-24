@@ -1,38 +1,5 @@
 #include "push_swap.h"
 
-void	ft_stack_median(t_stack *stacks)
-{
-	int	half;
-	int	med;
-	int	i;
-
-	i = 1;
-	half = ft_lstlen_ps(stacks);
-	med = half / 2;
-	if (half % 2)
-		med ++;
-	while (stacks)
-	{
-		stacks->index = i++;
-		if (stacks->index <= med)
-			stacks->median = true;
-		else
-			stacks->median = false;
-		stacks = stacks->next;
-	}	
-}
-
-int	ft_stackorder(t_stack *stacks)
-{
-	while (stacks && stacks->next)
-	{
-		if (stacks->dataarg > stacks->next->dataarg)
-			return (0);
-		stacks = stacks->next;
-	}
-	return (1);
-}
-
 void	ft_sort_three(t_stack **a)
 {
 	t_stack	*max;
@@ -93,5 +60,35 @@ void	ft_sort_pa(t_stack **a, t_stack **b)
 				ft_rever_rotate(a, b, MOVERRA);
 		}
 		ft_push(a, b, MOVEPA);
+	}
+}
+
+void	ft_sort_stacks(t_stack **a, t_stack **b)
+{
+	int	len;
+
+	len = ft_lstlen_ps(*a);
+	if (len-- > 3 && !ft_stackorder(*a))
+		ft_push(a, b, MOVEPB);
+	if (len-- > 3 && !ft_stackorder(*a))
+		ft_push(a, b, MOVEPB);
+	ft_sort_pb(a, b);
+	ft_sort_three(a);
+	ft_sort_pa(a, b);
+	ft_stack_median(*a);
+	ft_revise_end(a, b);
+}
+
+void	ft_revise_end(t_stack **a, t_stack **b)
+{
+	t_stack	*min;
+
+	min = ft_findmin(*a);
+	while (*a != min)
+	{
+		if (min->median)
+			ft_rotate(a, b, MOVERA);
+		else
+			ft_rever_rotate(a, b, MOVERRA);
 	}
 }

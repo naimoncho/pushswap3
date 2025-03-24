@@ -5,7 +5,7 @@ NAME = push_swap
 LIBFT_DIR = libft
 INCLUDES_DIR = includes
 
-SRC = main.c find_prep.c stack_a-b.c stack_b-a.c alg_stack.c ft_split_ps.c order.c stack_in.c error.c ft_calloc_ps.c list_utils_ps.c \
+SRC = main.c find_prep.c stack_a-b.c ft_split_ps.c order.c stack_in.c lists_utils.c ft_calloc_ps.c utils_ps.c \
       push.c swap.c rever_rotate.c rotate.c
 OBJ = $(SRC:.c=.o)
 

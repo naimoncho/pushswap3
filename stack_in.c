@@ -22,6 +22,29 @@ static long		ft_atol_ps(const char *str)
 	}
 	return (num * sign);
 }
+
+void	ft_duplicates(t_stack *s)
+{
+	t_stack *num;
+
+	if (s == NULL)
+		return ;
+	while (s)
+	{
+		num = s->next;
+		while (num != NULL)
+		{
+			if (s->dataarg == num->dataarg)
+			{
+				write(2, "Error\n", 6);
+				exit(EXIT_SUCCESS) ;
+			}
+			num =  num->next;
+		}
+		s = s->next;
+	}	
+}
+
 void	ft_join_node(t_stack **stacks, char **nums, int *index)
 {
 	int		i;
