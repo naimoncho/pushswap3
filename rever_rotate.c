@@ -1,37 +1,42 @@
 #include "./push_swap.h"
 
-static void	ft_rever_rotate(t_stack **stacks)
+void	ft_rever_rotatenode(t_stack **stacks)
 {
 	t_stack *lstnode;
-	t_stack *secondlast;
+	t_stack *prev_last;
 
 	if (!*stacks || !(*stacks)->next)
 		return ;
+	prev_last = ft_lstlast_ps(*stacks)->prev;
 	lstnode = ft_lstlast_ps(*stacks);
-	secondlast = lstnode->prev;
-	secondlast->next = NULL;
-	lstnode->prev = NULL;
-	lstnode->next = *stacks;
-	(*stacks)->prev = lstnode;
-	*stacks = lstnode;
+	if (!lstnode || !prev_last)
+		return ;
+	if(*stacks)
+	{
+		lstnode->prev = NULL;
+		lstnode->next = *stacks;
+		lstnode->next->prev = lstnode;
+		prev_last->next = NULL;
+		*stacks = lstnode;
+	}
 }
 
-void	rra(t_stack **a)
+void	ft_rever_rotate(t_stack **a,t_stack **b, int move)
 {
-	ft_rever_rotate(a);
-	write(1, "rra\n", 4);
+	if (move == MOVERRA)
+	{
+		ft_rever_rotatenode(a);
+		ft_putstr("rra\n");
+	}
+	else if (move == MOVERRB)
+	{
+		ft_rever_rotatenode(b);
+		ft_putstr("rrb\n");
+	}
+	else if (move == MOVERRR)
+	{
+		ft_rever_rotatenode(a);
+		ft_rever_rotatenode(b);
+		ft_putstr("rrr\n");
+	}
 }
-
-void	rrb(t_stack **b)
-{
-	ft_rever_rotate(b);
-	write(1, "rrb\n", 4);
-}
-
-void	rrr(t_stack **a, t_stack **b)
-{
-	ft_rever_rotate(a);
-	ft_rever_rotate(b);
-	write(1, "rrr\n", 4);
-}
-

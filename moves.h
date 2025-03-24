@@ -1,0 +1,11 @@
+#define MOVEPA 0
+#define MOVEPB 1
+#define MOVESA 2
+#define MOVESB 3
+#define MOVESS 4
+#define MOVERA 5
+#define MOVERB 6
+#define MOVERR 7
+#define MOVERRA 8
+#define MOVERRB 9
+#define MOVERRR 10

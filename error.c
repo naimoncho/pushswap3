@@ -1,56 +1,59 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   error.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ncheniou <ncheniou@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/17 13:46:29 by ncheniou          #+#    #+#             */
+/*   Updated: 2025/03/24 21:24:22 by ncheniou         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "push_swap.h"
 
-void	ft_errors_free(t_stack **a)
+void	ft_free_all(char **matrix)
 {
-	ft_free_stacks(a);
-	write(2, "Error\n", 6);
-	exit(0);
+	int	i;
+
+	i = 0;
+	while (matrix[i])
+		free(matrix[i++]);
+	free(matrix);
 }
 
-int ft_syntax(char *s)
-{
-    int i = 0;
-
-    if (s[i] == '+' || s[i] == '-')
-        i++;
-    if (s[i] == '\0')
-        return (1);
-    while (s[i])
-    {
-        if (s[i] < '0' || s[i] > '9')
-            return (1);
-        i++;
-    }
-    return (0);
-}
 
 void	ft_free_stacks(t_stack **stacks)
 {
 	t_stack	*current;
-	t_stack	*temp;
 
-	if (!stacks)
-		return ;
-	current = *stacks;
-	while (current)
+	while (*stacks)
 	{
-		temp = current->next;
-		current->dataarg = 0;
-		free(current);
-		current = temp;
+		current = (*stacks)->next;
+		free(*stacks);
+		*stacks = current;
 	}
-	*stacks = NULL;
+	free(stacks);
 }
 
-int	ft_duplicates(t_stack *s, int nbr)
+void	ft_duplicates(t_stack *s)
 {
-	if (!s)
-		return (0);
+	t_stack *num;
+
+	if (s == NULL)
+		return ;
 	while (s)
 	{
-		if (s->dataarg == nbr)
-			return (1);
+		num = s->next;
+		while (num != NULL)
+		{
+			if (s->dataarg == num->dataarg)
+			{
+				write(2, "Error\n", 6);
+				exit(EXIT_SUCCESS) ;
+			}
+			num =  num->next;
+		}
 		s = s->next;
-	}
-	return (0);
+	}	
 }

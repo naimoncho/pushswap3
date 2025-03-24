@@ -50,11 +50,9 @@ t_stack	*ft_lowercost(t_stack *stacks)
 	best_score = INT_MAX;
 	while (stacks)
 	{
-		if (stacks->up_median && stacks->node->up_median)
-			moves -= 1;
-		else if (!stacks->up_median && !stacks->node->up_median)
-			moves -= 1;
 		moves = stacks->cost;
+		if (stacks->median == stacks->target->median)
+			moves -= 1;
 		if (moves < best_score)
 		{
 			best_score = moves;

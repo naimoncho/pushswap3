@@ -22,47 +22,54 @@ static long		ft_atol_ps(const char *str)
 	}
 	return (num * sign);
 }
-void	ft_join_node(t_stack **stacks, int n)
+void	ft_join_node(t_stack **stacks, char **nums, int *index)
 {
+	int		i;
+	long	nb;
 	t_stack	*node;
-	t_stack	*final_node;
 
-	if (!stacks)
-		return ;
-	node = malloc(sizeof(t_stack));
-	if (!node)
-		return ;
-	node->next = NULL;
-	node->dataarg = n;
-	if (!(*stacks))
+	nb = 0;
+	if (!nums[1])
 	{
-		*stacks = node;
-		node->prev = NULL;
+		nb = ft_atol_ps(nums[0]);
+		if (nb == (long)INT_MAX + 1)
+			write(2, "Error\n", 6);
+		node = ft_lstnew_ps((*index)++, nb);
+		ft_lstadd_back_ps(stacks, node);
 	}
 	else
 	{
-		final_node = ft_lstlast_ps(*stacks);
-		final_node->next = node;
-		node->prev = final_node;
+		i = 0;
+		while (nums[i])
+		{
+			nb = ft_atol_ps(nums[i++]);
+			if (nb == (long)INT_MAX + 1)
+				write(2, "Error\n", 6);
+			node = ft_lstnew_ps((*index)++, nb);
+			ft_lstadd_back_ps(stacks, node);
+		}
 	}
 }
 
-void	ft_stack_in(t_stack **args, char **argv)
+void	ft_stack_in(char **argv, t_stack **a)
 {
-	long	nbr;
 	int		j;
+	int		index;
+	char	**nums;
 
 	j = 0;
+	index = 1;
 	while (argv[j])
 	{
-		if (ft_syntax(argv[j]))
-			ft_errors_free(args);
-		nbr = ft_atol_ps(argv[j]);
-		if (nbr > INT_MAX || nbr < INT_MIN)
-			ft_errors_free(args);
-		if (ft_duplicates(*args, (int)nbr))
-			ft_errors_free(args);
-		ft_join_node(args, (int)nbr);
+		if (argv[j][0] != '\0')
+		{
+			nums = ft_split_ps(argv[j], ' ');
+			ft_join_node(a, nums, &index);
+			ft_duplicates(*a);
+			ft_free_all(nums);
+		}
+		else
+			write(2, "Error\n", 6);
 		j ++;
 	}
 }

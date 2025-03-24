@@ -7,18 +7,17 @@ void	ft_set_a(t_stack *a, t_stack *b)
 
 	best_index = LONG_MIN;
 	node_b = b;
-	
 	while (node_b)
 	{
 		if(node_b->dataarg < a->dataarg && node_b->dataarg > best_index)
 		{
 			best_index = node_b->dataarg;
-			a->node = node_b;
+			a->target = node_b;
 		}
 		node_b = node_b->next;
 	}
 	if (best_index == LONG_MIN)
-		a->node = ft_findmax(b);
+		a->target = ft_findmax(b);
 }
 
 
@@ -43,8 +42,6 @@ t_stack	*ft_cheapest(t_stack **a, t_stack **b)
 		}
 		node_a = node_a->next;
 	}
-	if (!min_cost)
-		return (NULL);
 	return (min_cost);
 }
 
@@ -53,23 +50,25 @@ void	ft_pushcost(t_stack *a,t_stack *b,t_stack *node_a, int *counter)
 	int	below_median;
 	
 	ft_set_a(node_a, b);
-	below_median = ft_lstlen_ps(b) - node_a->node->index;
-	if (node_a->up_median)
+	if (!node_a || !node_a->target)
+		return ;
+	below_median = ft_lstlen_ps(b) - node_a->target->index;
+	if (node_a->median)
 		*counter = node_a->index;
 	else
 		*counter = ft_lstlen_ps(a) - node_a->index;
-	if (node_a->up_median && node_a->node->up_median)
+	if (node_a->median && node_a->target->median)
 	{
-		if (node_a->node->index > *counter)
-			counter += (node_a->node->index - *counter);
+		if (node_a->target->index > *counter)
+			counter += (node_a->target->index - *counter);
 	}
-	else if (!node_a->up_median && !node_a->node->up_median)
+	else if (!node_a->median && !node_a->target->median)
 	{
 		if (*counter < below_median)
 			counter += (below_median - *counter);
 	}
-	else if (node_a->node->up_median)
-		*counter += node_a->node->index;
+	else if (node_a->target->median)
+		*counter += node_a->target->index;
 	else
 		*counter += below_median;
 }

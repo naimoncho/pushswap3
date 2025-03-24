@@ -1,6 +1,6 @@
 #include "./push_swap.h"
 
-static void	ft_rotate(t_stack **stacks)
+void	ft_rotatenode(t_stack **stacks)
 {
 	t_stack	*firstnode;
 	t_stack *lstnode;
@@ -16,21 +16,22 @@ static void	ft_rotate(t_stack **stacks)
 	firstnode->prev = lstnode;
 }
 
-void	ra(t_stack **a)
+void	ft_rotate(t_stack **a,t_stack **b, int move)
 {
-	ft_rotate(a);
-	write(1, "ra\n", 3);
-}
-
-void	rb(t_stack **b)
-{
-	ft_rotate(b);
-	write(1, "rb\n", 3);
-}
-
-void	rr(t_stack **a, t_stack **b)
-{
-	ft_rotate(a);
-	ft_rotate(b);
-	write(1, "rr\n", 3);
+	if (move == MOVERA)
+	{
+		ft_rotatenode(a);
+		ft_putstr("ra\n");
+	}
+	else if (move == MOVERB)
+	{
+		ft_rotatenode(b);
+		ft_putstr("rb\n");
+	}
+	if (move == MOVERR)
+	{
+		ft_rotatenode(a);
+		ft_rotatenode(b);
+		ft_putstr("rr\n");
+	}
 }

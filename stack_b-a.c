@@ -1,52 +1,48 @@
 #include "push_swap.h"
 
-t_stack	*ft_set_b(t_stack *a, t_stack *b)
+t_stack	*ft_set_b(t_stack *node, t_stack *a)
 {
-	t_stack	*node_a;
+	t_stack	*target;
 	long	best_index;
 	
 	best_index = LONG_MAX;
-	node_a = a;
-	while (node_a)
+	target = a;
+	while (target)
 	{
-		if(node_a->dataarg < b->dataarg && node_a->dataarg > best_index)
+		if(target->dataarg > node->dataarg && target->dataarg < best_index)
 		{
-			best_index = node_a->dataarg;
-			b->node = node_a;
+			best_index = target->dataarg;
+			node->target = target;
 		}
-		node_a = node_a->next;
+		target = target->next;
 	}
 	if (best_index == LONG_MAX)
-		b->node = ft_findmax(a);
-	if (!b->node)
-		return (NULL);
-	return (b->node);
+		node->target = ft_findmin(a);
+	return (node->target);
 }
 
 void	ft_stack_top_head(t_stack **a, t_stack **b, t_stack *min_cost)
 {
-	if (!min_cost || !min_cost->node)
-		return;
-	if (min_cost->up_median && min_cost->node->up_median)
-		while (*a != min_cost && *b != min_cost->node)
-			rr(a,b);
-	else if (!min_cost->up_median && !min_cost->node->up_median)
-		while (*a != min_cost && *b != min_cost->node)
-			rrr(a,b);
-	while (*a != min_cost)
-	{
-		if (min_cost->up_median)
-			ra(a);
-		else	
-			rra(a);
-	}
-	while (*b != min_cost->node)
-	{
-		if (min_cost->node->up_median)
-			rb(b);
-		else
-			rrb(b);
-	}
+	if (!min_cost || !min_cost->target)
+		return ;
+	if (min_cost->median && min_cost->target->median)
+		while (*a != min_cost && *b != min_cost->target)
+			ft_rotate(a, b, MOVERR);
+	else if (!min_cost->median && !min_cost->target->median)
+		while (*a != min_cost && *b != min_cost->target)
+			ft_rever_rotate(a, b, MOVERRR);
+	if (min_cost->median)
+		while (*a != min_cost)
+			ft_rotate(a, b, MOVERA);
+	else	
+		while (*a != min_cost)
+			ft_rever_rotate(a, b, MOVERRA);
+	if (min_cost->target->median)
+		while (*b != min_cost->target)
+			ft_rotate(a, b, MOVERB);
+	else
+		while (*b != min_cost->target)
+			ft_rever_rotate(a, b, MOVERRB);
 }
 
 // void	ft_init_nodesb(t_stack *a, t_stack *b)

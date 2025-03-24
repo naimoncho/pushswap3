@@ -49,6 +49,8 @@ char	**ft_split_ps(char const *s, char c)
 	size_t	j;
 	char	**split;
 
+	if (!s)
+		return (NULL);
 	i = 0;
 	x = 0;
 	split = ft_calloc(words(s, c) + 1, sizeof(char *));

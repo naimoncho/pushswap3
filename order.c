@@ -13,25 +13,24 @@ void	ft_stack_median(t_stack *stacks)
 		med ++;
 	while (stacks)
 	{
-		stacks->index = i ++;
+		stacks->index = i++;
 		if (stacks->index <= med)
-			stacks->up_median = true;
+			stacks->median = true;
 		else
-			stacks->up_median = false;
+			stacks->median = false;
+		stacks = stacks->next;
 	}	
 }
 
-bool	ft_stackorder(t_stack *stacks)
+int	ft_stackorder(t_stack *stacks)
 {
-	if (!stacks)
-		return (true);
 	while (stacks && stacks->next)
 	{
 		if (stacks->dataarg > stacks->next->dataarg)
-			return (false);
+			return (0);
 		stacks = stacks->next;
 	}
-	return (true);
+	return (1);
 }
 
 void	ft_sort_three(t_stack **a)
@@ -42,11 +41,20 @@ void	ft_sort_three(t_stack **a)
 	if (!ft_stackorder(*a))
 	{
 		if (*a == max)
-			ra(a);
+		{
+			ft_rotatenode(a);
+			ft_putstr("ra\n");
+		}
 		else if ((*a)->next == max)
-			rra(a);
+		{
+			ft_rever_rotatenode(a);
+			ft_putstr("rra\n");
+		}
 		if ((*a)->dataarg > (*a)->next->dataarg)
-			sa(a);
+		{
+			ft_swapnode(a);
+			ft_putstr("sa\n");
+		}
 	}
 }
 
@@ -56,15 +64,13 @@ void	ft_sort_pb(t_stack **a, t_stack **b)
 	int		len;
 
 	len = ft_lstlen_ps(*a);
-	while (len-- > 3)
+	while (len-- > 3 && !ft_stackorder(*a))
 	{
 		ft_stack_median(*a);
 		ft_stack_median(*b);
 		cost = ft_cheapest(a, b);
-		if (!cost || !cost->node)
-			return;
 		ft_stack_top_head(a, b, cost);
-		pb(a,b);
+		ft_push(a, b, MOVEPB);
 	}
 }
 
@@ -79,15 +85,13 @@ void	ft_sort_pa(t_stack **a, t_stack **b)
 		ft_stack_median(*a);
 		ft_stack_median(*b);
 		node_b = ft_set_b(*a, *b);
-		if (!node_b)
-			break ;
 		while (*a != node_b)
 		{
-			if (node_b->up_median)
-				ra(a);
+			if (node_b->median)
+				ft_rotate(a, b, MOVERA);
 			else
-				rra(a);
+				ft_rever_rotate(a, b, MOVERRA);
 		}
-		pa(a, b);
+		ft_push(a, b, MOVEPA);
 	}
 }
